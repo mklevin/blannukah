@@ -1,4 +1,5 @@
 import DatawrapperEmbed from "@/app/embeds/datawrapper";
+import PlotSetEmbed from "@/app/embeds/plotset";
 
 export default function Home() {
   return (
