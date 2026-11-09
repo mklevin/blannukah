@@ -1,11 +1,17 @@
 import Script from "next/script";
 
-export default function DatawrapperEmbed() {
-  const embedId = "1T2G9";
-  const containerId = `datawrapper-vis-${embedId}`;
+type DatawrapperEmbedProps = {
+  embedId: string,
+  containerId: string
+}
 
+export default function DatawrapperEmbed({
+  embedId,
+  containerId
+}: DatawrapperEmbedProps) {
   return (
     <div
+      className="datawrapper"
       id={containerId}
       style={{ minHeight: 441, width: "100%" }}
     >

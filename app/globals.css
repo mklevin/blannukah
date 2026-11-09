@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+
+:root {
+    --title-color: rgb(18, 18, 18);
+    --subtitle-color: rgb(54, 54, 54);
+    --divider-color: rgb(223, 223, 223);
+    --subdivider-color: var(--title-color);
+    --footer-color: rgb(102, 102, 102);
+    --live-color: rgb(208, 2, 27);
+}
+
+main {
+    font-family: "Georgia";
+}
+
+header {
+    border-bottom: 1px solid var(--divider-color);
+}
+
+header .title {
+    font-family: "Manufacturing Consent";
+    font-size: 2.5em;
+    text-align: center;
+    letter-spacing: -0.03em;
+}
+
+.mainContent {
+    margin: 1.5em 4em;
+}
+
+h1 {
+    font-family: "cheltenhamclassic";
+    font-size: 2.5em;
+    letter-spacing: -0.005em;
+    font-weight: 600;
+    color: var(--title-color);
+}
+
+h2 {
+    font-family: "cheltenhamclassic";
+    font-size: 2em;
+    letter-spacing: -0.005em;
+    font-weight: 600;
+    color: var(--title-color);
+}
+
+h3 {
+    font-family: "Libre Franklin";
+    font-size: 0.9em;
+    font-weight: 600;
+    padding-top: 0.3em;
+}
+
+.subtext {
+    font-family: "Georgia";
+    font-size: 1.25em;
+    letter-spacing: -0.03em;
+    color: var(--subtitle-color);
+}
+
+.live-indicator {
+    font-family: "Libre Franklin";
+    padding-bottom: 0.3em;
+}
+
+.live-text {
+    background-color: var(--live-color);
+    border-radius: 3px;
+    padding: 2px 6px;
+
+    font-size: 0.7em;
+    font-weight: 600;
+    color: white;
+}
+
+.last-updated {
+    margin-left: 0.5em;
+    font-size: 0.75em;
+    color: var(--live-color);
+}
+
+#presidential .map {
+    padding: 1em;
+}
+
+.senatorials {
+    border-top: 1px solid var(--subdivider-color);
+    padding-top: 0.8em;
+}
+
+.senatorials p {
+    font-family: "Libre Franklin";
+    font-size: 0.95em;
+    letter-spacing: -0.03em;
+    color: var(--subtitle-color);
+    padding-top: 0.3em;
+}
+
+.subdivider {
+    border-top: 1px solid var(--divider-color);
+    padding-bottom: 1em;
+}
+
+.map-spacer {
+    height: 1em;
+}
+
+footer {
+    margin: 2em 0 1em 0;
+    font-family: "Libre Franklin";
+    font-size: 0.7em;
+    text-align: center;
+    color: var(--footer-color);
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
