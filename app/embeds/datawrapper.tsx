@@ -13,7 +13,7 @@ export default function DatawrapperEmbed({
     <div
       className="datawrapper"
       id={containerId}
-      style={{ minHeight: 441, width: "100%" }}
+      style={{ minHeight: 500, width: "100%" }}
     >
       <Script
         src={`https://datawrapper.dwcdn.net/${embedId}/embed.js`}

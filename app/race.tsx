@@ -17,8 +17,8 @@ export default function Race({
     spacer = false
 }: RaceProps) {
     return (
-      <div className="individual-race grid grid-cols-3">
-        <div>
+      <div className="individual-race grid grid-cols-1 md:grid-cols-3">
+        <div className="description-container">
           <h3>
             {name}
           </h3>
@@ -26,14 +26,14 @@ export default function Race({
             {description}
           </p>
         </div>
-        <div>
+        <div className="datawrapper-container">
           {spacer ? <div className="map-spacer"/> : ""}
           <DatawrapperEmbed
             embedId = {datawrapperEmbedId}
             containerId = {`datawrapper-${datawrapperEmbedId}`}
           />
         </div>
-        <div>
+        <div className="plotset-container">
           <PlotSetEmbed
             chartId={plotSetChartId}
             title={name}
