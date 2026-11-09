@@ -1,10 +1,10 @@
-import Script from 'next/script'
+import DatawrapperEmbed from "@/app/embeds/datawrapper";
 
 export default function Home() {
   return (
     <main>
       <div>Next.js on GitHub Pages</div>
-      <div><Script src="embeds/presidential.js" /></div>
+      <DatawrapperEmbed/>
     </main>
   );
 }
