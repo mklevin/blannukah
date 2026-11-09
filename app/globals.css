@@ -102,7 +102,7 @@ h3 {
 
 .plotset-container {
     z-index: -1;
-    margin-bottom: -3em;
+    margin-bottom: -1.5em;
 
     @variant md {
         margin-bottom: 0;
