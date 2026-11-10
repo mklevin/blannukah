@@ -118,20 +118,15 @@ h3 {
     padding-top: 0.3em;
 }
 
+.individual-race {
+    margin-bottom: 1em;
+}
+
 .datawrapper-container {
     padding-top: 1em;
 
     @variant md {
         padding-top: 0;
-    }
-}
-
-.plotset-container {
-    z-index: -1;
-    margin-bottom: -1.5em;
-
-    @variant md {
-        margin-bottom: 0;
     }
 }
 

@@ -1,7 +1,6 @@
-import DatawrapperEmbed from "@/app/embeds/datawrapper";
 import PlotSetEmbed from "@/app/embeds/plotset";
-import NortheastElectionMap from "@/app/maps/northeast"
 import { ReactNode } from "react";
+import VoteShareGauge from "@/app/components/gauge";
 
 type RaceProps = {
     name: string,
@@ -33,11 +32,13 @@ export default function Race({
           {map}
         </div>
         <div className="plotset-container">
-          <PlotSetEmbed
-            chartId={plotSetChartId}
-            title={name}
-            aspect="0.511"
-            height={510}
+          <VoteShareGauge
+            optionAShare={0.64}
+            optionATotal={125000}
+            optionBTotal={70312}
+            optionAName="Option A"
+            optionBName="Option B"
+            caption="Option A leads"
           />
         </div>
       </div>
