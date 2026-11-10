@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import VoteShareGauge from "@/app/components/gauge";
+import VoteShareGauge from "@/app/components/meters/gauge";
 
 type RaceProps = {
     name: string,

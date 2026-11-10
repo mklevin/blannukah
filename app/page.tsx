@@ -6,9 +6,9 @@ import NationalElectionMap from "@/app/maps/national";
 import NortheastElectionMap from "@/app/maps/northeast";
 import MidwestElectionMap from "@/app/maps/midwest";
 
-export default function Home() {
+import VoteShareMenorah from "@/app/components/meters/menorah";
 
-  
+export default function Home() {
   return (
     <main>
       <header>
@@ -22,7 +22,16 @@ export default function Home() {
             lastUpdated="11:00pm E.T."
           />
           <h1>Hanukkah List Presidential Election Results</h1>
-            <div className="subtext">Something about this map.</div>
+          <div className="subtext">Something about this map.</div>
+
+          <VoteShareMenorah
+            optionAShare={0.64}
+            optionATotal={125000}
+            optionBTotal={70312}
+            optionAName="Candidate A"
+            optionBName="Candidate B"
+          />
+          
           <div className="map">
             <NationalElectionMap />
           </div>
