@@ -1,15 +1,21 @@
 import DatawrapperEmbed from "@/app/embeds/datawrapper";
 import Link from "next/link";
-import LiveIndicator from "@/app/live";
+import LiveIndicator from "@/app/components/live";
 import PlotSetEmbed from "@/app/embeds/plotset";
-import Race from "@/app/race";
+import Race from "@/app/components/race";
+
+import NationalElectionMap from "@/app/maps/national";
+import NortheastElectionMap from "@/app/maps/northeast";
+import MidwestElectionMap from "@/app/maps/midwest";
 
 export default function Home() {
+
+  
   return (
     <main>
       <header>
         <div className="title">
-          The Blue York Thymes
+          The Blue York Rhymes
         </div>
       </header>
       <div className="mainContent">
@@ -20,10 +26,11 @@ export default function Home() {
           <h1>Hanukkah List Presidential Election Results</h1>
             <div className="subtext">Something about this map.</div>
           <div className="map">
-            <DatawrapperEmbed
+            {/* <DatawrapperEmbed
               embedId="1T2G9"
               containerId="datawrapper1"
-            />
+            /> */}
+            <NationalElectionMap />
           </div>
         <PlotSetEmbed
           chartId="5d9a0baa-a500-4421-8a50-a09dbc0ecaf2"
@@ -37,21 +44,21 @@ export default function Home() {
           <Race
             name="Blue York (Northeast)"
             description="I have so many words to say about this race, enough to make the text take up two, nay even three lines. So many words that they're going to attempt to encroach on the map's space, but if we've done everything right it'll be fine!"
-            datawrapperEmbedId="ztBqX"
+            map={<NortheastElectionMap />}
             plotSetChartId="5d9a0baa-a500-4421-8a50-a09dbc0ecaf2"
           />
           <div className="subdivider"/>
           <Race
             name="Blichigas (Midwest)"
             description="Some words about this race."
-            datawrapperEmbedId="ccL45"
+            map={<MidwestElectionMap />}
             plotSetChartId="5d9a0baa-a500-4421-8a50-a09dbc0ecaf2"
             spacer={true}
           />
         </div>
       </div>
       <footer>
-        <span><Link href="https://mattlevin.io">© 2026 The Blue York Thymes Company</Link></span>
+        <span><Link href="https://mattlevin.io">© 2026 The Blue York Rhymes Company</Link></span>
       </footer>
     </main>
   );

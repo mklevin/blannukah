@@ -7,6 +7,23 @@
     --subdivider-color: var(--title-color);
     --footer-color: rgb(102, 102, 102);
     --live-color: rgb(208, 2, 27);
+
+    /* Map colors */
+    --map-option-a: #4e79a7;
+    --map-tie: #999999;
+    --map-option-b: #f28e2b;
+
+    /* Map structure */
+    --map-state-boundary: #ffffff;
+    --map-active-outline: #222222;
+    --map-highlight: rgb(255 255 255 / 18%);
+
+    /* Tooltip */
+    --map-tooltip-background: #ffffff;
+    --map-tooltip-color: #222222;
+    --map-tooltip-muted: #777777;
+    --map-tooltip-border: #dddddd;
+    --map-tooltip-shadow: 0 3px 12px rgb(0 0 0 / 12%);
 }
 
 main {
@@ -78,7 +95,9 @@ h3 {
 
 .last-updated {
     margin-left: 0.5em;
-    font-size: 0.75em;
+    vertical-align: center;
+
+    font-size: 0.8em;
     color: var(--live-color);
 }
 
@@ -100,7 +119,11 @@ h3 {
 }
 
 .datawrapper-container {
-    padding-bottom: 1em;
+    padding-top: 1em;
+
+    @variant md {
+        padding-top: 0;
+    }
 }
 
 .plotset-container {
@@ -131,4 +154,38 @@ footer {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem auto 1rem;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.map-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.map-legend__swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.map-hit-area path {
+  cursor: pointer;
+  outline: none;
+}
+
+.map-hit-area path:focus {
+  outline: none;
 }

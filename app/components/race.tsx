@@ -1,10 +1,12 @@
 import DatawrapperEmbed from "@/app/embeds/datawrapper";
 import PlotSetEmbed from "@/app/embeds/plotset";
+import NortheastElectionMap from "@/app/maps/northeast"
+import { ReactNode } from "react";
 
 type RaceProps = {
     name: string,
     description: string,
-    datawrapperEmbedId: string,
+    map: ReactNode,
     plotSetChartId: string
     spacer?: boolean
 }
@@ -12,7 +14,7 @@ type RaceProps = {
 export default function Race({
     name,
     description,
-    datawrapperEmbedId,
+    map,
     plotSetChartId,
     spacer = false
 }: RaceProps) {
@@ -28,10 +30,7 @@ export default function Race({
         </div>
         <div className="datawrapper-container">
           {spacer ? <div className="map-spacer"/> : ""}
-          <DatawrapperEmbed
-            embedId = {datawrapperEmbedId}
-            containerId = {`datawrapper-${datawrapperEmbedId}`}
-          />
+          {map}
         </div>
         <div className="plotset-container">
           <PlotSetEmbed
