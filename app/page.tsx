@@ -1,7 +1,5 @@
-import DatawrapperEmbed from "@/app/embeds/datawrapper";
 import Link from "next/link";
 import LiveIndicator from "@/app/components/live";
-import PlotSetEmbed from "@/app/embeds/plotset";
 import Race from "@/app/components/race";
 
 import NationalElectionMap from "@/app/maps/national";
@@ -26,18 +24,8 @@ export default function Home() {
           <h1>Hanukkah List Presidential Election Results</h1>
             <div className="subtext">Something about this map.</div>
           <div className="map">
-            {/* <DatawrapperEmbed
-              embedId="1T2G9"
-              containerId="datawrapper1"
-            /> */}
             <NationalElectionMap />
           </div>
-        <PlotSetEmbed
-          chartId="5d9a0baa-a500-4421-8a50-a09dbc0ecaf2"
-          title="Presidential race chart"
-          aspect="0.511"
-          height={510}
-        />
         </div>
         <div className="senatorials">
           <h2>Senate elections</h2>

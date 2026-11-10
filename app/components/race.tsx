@@ -1,4 +1,3 @@
-import PlotSetEmbed from "@/app/embeds/plotset";
 import { ReactNode } from "react";
 import VoteShareGauge from "@/app/components/gauge";
 
