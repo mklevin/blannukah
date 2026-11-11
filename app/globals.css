@@ -120,8 +120,8 @@ h3 {
 
 .navigation .vote-link {
     margin-left: auto;
-    margin-right: 1em;
-    height: 1.5em;
+    margin-right: 1%;
+    height: 1.6em;
     cursor: pointer;
 
     background-color: var(--button-color);
