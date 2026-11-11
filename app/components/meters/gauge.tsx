@@ -1,15 +1,11 @@
-
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useElectionData } from "@/app/components/election-data-provider";
+import type { CensusRegion } from "@/app/lib/constants/geography";
 
 type VoteShareGaugeProps = {
-  /** Option A's share of the combined vote, from 0 to 1. */
-  optionAShare?: number;
-  optionATotal?: number;
-  optionBTotal?: number;
-  optionAName?: string;
-  optionBName?: string;
+  region: CensusRegion;
   caption?: string;
 };
 
@@ -62,14 +58,45 @@ function segmentPath(startAngle: number, endAngle: number) {
 }
 
 export default function VoteShareGauge({
-  optionAShare = 0.64,
-  optionATotal = 125000,
-  optionBTotal = 70312,
-  optionAName = "Option A",
-  optionBName = "Option B",
+  region,
   caption,
 }: VoteShareGaugeProps) {
   const needleRef = useRef<SVGGElement>(null);
+  const { data, loading, error } = useElectionData();
+
+  const results = data?.states.filter(
+    (result) =>
+      result.geography.type === "state" &&
+      result.geography.region === region
+  );
+
+  if (loading) {
+    return <p role="status">Loading gauge…</p>;
+  }
+
+  if (error) {
+    return <p role="alert">{error}</p>;
+  }
+
+  if (!results || results.length === 0) return null;
+
+  const optionAName = results[0].candidates[0].name;
+  const optionBName = results[0].candidates[1].name;
+
+  const optionATotal = results.reduce(
+    (total, result) => total + result.candidates[0].total,
+    0
+  );
+
+  const optionBTotal = results.reduce(
+    (total, result) => total + result.candidates[1].total,
+    0
+  );
+
+  const totalVotes = optionATotal + optionBTotal;
+
+  const optionAShare =
+    totalVotes > 0 ? optionATotal / totalVotes : 0.5;
 
   const safeShare = Math.max(0, Math.min(1, optionAShare));
   const targetRotation = 90 - safeShare * 180;

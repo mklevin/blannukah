@@ -1,4 +1,10 @@
+
 import type { ElectionResult } from "@/app/lib/election-data";
+
+const CANDIDATE_COLORS = [
+  "var(--map-option-a)",
+  "var(--map-option-b)",
+];
 
 export function createTooltip(id: string): HTMLDivElement {
   const tooltip = document.createElement("div");
@@ -33,15 +39,22 @@ export function populateTooltip(
 ) {
   tooltip.replaceChildren();
 
+  const isNationalMap = result.geography.type === "region";
+
   const heading = document.createElement("div");
-  heading.textContent = result.coolName || displayName;
+  heading.textContent = isNationalMap
+    ? result.coolName || displayName
+    : displayName;
+
   heading.style.cssText = `
     font-size: 14px;
     font-weight: 700;
+    ${isNationalMap ? "" : "margin-bottom: 8px;"}
   `;
+
   tooltip.appendChild(heading);
 
-  if (result.coolName) {
+  if (isNationalMap && result.coolName) {
     const subtitle = document.createElement("div");
     subtitle.textContent = displayName;
     subtitle.style.cssText = `
@@ -50,11 +63,9 @@ export function populateTooltip(
       margin-bottom: 8px;
     `;
     tooltip.appendChild(subtitle);
-  } else {
-    heading.style.marginBottom = "8px";
   }
 
-  result.candidates.forEach((candidate) => {
+  result.candidates.forEach((candidate, index) => {
     const row = document.createElement("div");
 
     row.style.cssText = `
@@ -64,7 +75,6 @@ export function populateTooltip(
       gap: 20px;
     `;
 
-    // Candidate name and color swatch.
     const nameGroup = document.createElement("span");
     nameGroup.style.cssText = `
       display: inline-flex;
@@ -79,11 +89,7 @@ export function populateTooltip(
       height: 11px;
       flex-shrink: 0;
       border-radius: 3px;
-      background: ${
-        candidate.name === "Option A"
-          ? "var(--map-option-a)"
-          : "var(--map-option-b)"
-      };
+      background: ${CANDIDATE_COLORS[index]};
     `;
     swatch.setAttribute("aria-hidden", "true");
 

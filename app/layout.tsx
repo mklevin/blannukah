@@ -26,10 +26,6 @@ export default function RootLayout({
     <html lang="en" className={`${franklin.className} ${manufact.className}`}>
       <head>
         <link rel="preconnect" href="https://github.io/" />
-        <link
-          rel="stylesheet"
-          href="https://vetrivelcsamy.github.io/cheltenham-classic/cheltenhamclassic.css"
-        />
       </head>
       <body>{children}</body>
     </html>

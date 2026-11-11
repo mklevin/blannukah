@@ -14,12 +14,21 @@ importers:
       d3:
         specifier: ^7.9.2
         version: 7.9.2
+      date-fns:
+        specifier: ^4.4.0
+        version: 4.4.0
+      date-fns-tz:
+        specifier: ^3.2.0
+        version: 3.2.0(date-fns@4.4.0)
       next:
         specifier: ^15.5.29
         version: 15.5.29(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       node:
         specifier: ^27.0.0-alpha.0.0.0
         version: 27.0.0-alpha.0.0.0
+      papaparse:
+        specifier: ^5.7.0
+        version: 5.7.0
       react:
         specifier: ^19.0.0
         version: 19.3.1
@@ -39,6 +48,9 @@ importers:
       '@types/node':
         specifier: ^22.13.4
         version: 22.20.5
+      '@types/papaparse':
+        specifier: ^5.5.2
+        version: 5.5.2
       '@types/react':
         specifier: ^19.0.8
         version: 19.3.0
@@ -494,6 +506,9 @@ packages:
   '@types/node@22.20.5':
     resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
 
+  '@types/papaparse@5.5.2':
+    resolution: {integrity: sha512-gFnFp/JMzLHCwRf7tQHrNnfhN4eYBVYYI897CGX4MY1tzY9l2aLkVyx2IlKZ/SAqDbB3I1AOZW5gTMGGsqWliA==}
+
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
@@ -654,6 +669,14 @@ packages:
     resolution: {integrity: sha512-ZKb/mONPVKzaO5UlcWcwN8bS4ezvQaYu+bsou+XgNABdGC800kwH651ADTbbTxMPHW13UlvbQafdmJQDk1w7Mg==}
     engines: {node: '>=12'}
 
+  date-fns-tz@3.2.0:
+    resolution: {integrity: sha512-sg8HqoTEulcbbbVXeg84u5UnlsQa8GS5QXMqjjYIhS4abEVVKIUwe0/l/UhrZdKaL/W5eWZNlbTeEIiOXTcsBQ==}
+    peerDependencies:
+      date-fns: ^3.0.0 || ^4.0.0
+
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
+
   delaunator@5.1.0:
     resolution: {integrity: sha512-AGrQ4QSgssa1NGmWmLPqN5NY2KajF5MqxetNEO+o0n3ZwZZeTmt7bBnvzHWrmkZFxGgr4HdyFgelzgi06otLuQ==}
 
@@ -796,6 +819,9 @@ packages:
     resolution: {integrity: sha512-DvB+9YFbniCPfKjBe1A8XEWTnZQGkAogx9WLvdGciC0K20SsNUrOE8BUiUcUjDbFaBEy9Kazii/F5dO4MFcWOg==}
     engines: {npm: '>=5.0.0'}
     hasBin: true
+
+  papaparse@5.7.0:
+    resolution: {integrity: sha512-qBGxg/7Q3Kl9Wfhrz2Z74UnvnHTXLNG6jmKJFeBvP2+y4lV7So+7SR62+Zd47JvdrCkX+nDcnr0ObPzek/+6RA==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -1245,6 +1271,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/papaparse@5.5.2':
+    dependencies:
+      '@types/node': 22.20.5
+
   '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
       '@types/react': 19.3.0
@@ -1427,6 +1457,12 @@ snapshots:
       d3-transition: 3.0.2(d3-selection@3.0.1)
       d3-zoom: 3.0.1
 
+  date-fns-tz@3.2.0(date-fns@4.4.0):
+    dependencies:
+      date-fns: 4.4.0
+
+  date-fns@4.4.0: {}
+
   delaunator@5.1.0:
     dependencies:
       robust-predicates: 3.0.3
@@ -1538,6 +1574,8 @@ snapshots:
   node@27.0.0-alpha.0.0.0:
     dependencies:
       node-bin-setup: 1.1.4
+
+  papaparse@5.7.0: {}
 
   picocolors@1.1.1: {}
 

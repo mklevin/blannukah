@@ -1,7 +1,7 @@
 
 import * as topojson from "topojson-client";
 import us from "@/app/resources/states-10m.json";
-import type { CensusRegion } from "@/app/lib/election-data";
+import type { CensusRegion } from "@/app/lib/constants/geography";
 
 export const REGION_FIPS: Record<CensusRegion, string[]> = {
   Northeast: [

@@ -1,14 +1,44 @@
-export type CensusRegion =
-  | "Northeast"
-  | "Midwest"
-  | "South"
-  | "West";
+
+import Papa from "papaparse";
+
+import {
+  CENSUS_REGIONS,
+  GEOGRAPHY_NICKNAMES,
+  STATE_FIPS,
+  type CensusRegion,
+} from "@/app/lib/constants/geography";
+
+// -----------------------------------------------------------------------------
+// Spreadsheet URLs
+// -----------------------------------------------------------------------------
+
+const ELECTION_OPTIONS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNeiMncTFwe-g1VXNRRUrznZrgjEUH0c4aS_DYK9qUXc5oWLd-PiDdXVr0bZ6x8cilPM6sbELDE5et/pub?gid=859553188&single=true&output=csv";
+
+const ELECTION_RESULTS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNeiMncTFwe-g1VXNRRUrznZrgjEUH0c4aS_DYK9qUXc5oWLd-PiDdXVr0bZ6x8cilPM6sbELDE5et/pub?gid=2008483097&single=true&output=csv";
+
+// -----------------------------------------------------------------------------
+// Types
+// -----------------------------------------------------------------------------
+
+export type ElectionRace = "National" | CensusRegion;
 
 export type CandidateResult = {
-  name: "Option A" | "Option B";
+  name: string;
   percentage: number;
   total: number;
 };
+
+export type CandidateNames = {
+  optionA: string;
+  optionB: string;
+};
+
+export type ElectionOptionNames = Record<
+  ElectionRace,
+  CandidateNames
+>;
 
 export type ElectionGeography =
   | {
@@ -19,200 +49,100 @@ export type ElectionGeography =
   | {
       type: "state";
       fips: string;
-      name?: string;
+      name: string;
+      region: CensusRegion;
     };
 
 export type ElectionResult = {
   geography: ElectionGeography;
-  value: number;
-  lean: string;
   coolName: string;
   candidates: [CandidateResult, CandidateResult];
 };
 
-const EXPECTED_REGIONS: CensusRegion[] = [
-  "Northeast",
-  "Midwest",
-  "South",
-  "West",
-];
+export type NationalElectionSummary = {
+  candidates: [CandidateResult, CandidateResult];
+};
 
-// Valid state and DC FIPS codes. Territories are intentionally excluded.
-const VALID_STATE_FIPS = new Set([
-  "01", "02", "04", "05", "06", "08", "09", "10", "11",
-  "12", "13", "15", "16", "17", "18", "19", "20", "21",
-  "22", "23", "24", "25", "26", "27", "28", "29", "30",
-  "31", "32", "33", "34", "35", "36", "37", "38", "39",
-  "40", "41", "42", "44", "45", "46", "47", "48", "49",
-  "50", "51", "53", "54", "55", "56",
-]);
+export type ElectionData = {
+  states: ElectionResult[];
+  regions: ElectionResult[];
+  national: NationalElectionSummary;
+  lastUpdated: string;
+};
 
-function parseCSV(csv: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let inQuotes = false;
+// -----------------------------------------------------------------------------
+// CSV parsing
+// -----------------------------------------------------------------------------
 
-  for (let i = 0; i < csv.length; i++) {
-    const char = csv[i];
+type CSVRow = Record<string, string>;
 
-    if (inQuotes) {
-      if (char === '"') {
-        if (csv[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += char;
-      }
-      continue;
-    }
+function parseCSV(csv: string): CSVRow[] {
+  const result = Papa.parse<CSVRow>(csv, {
+    header: true,
+    skipEmptyLines: "greedy",
+    dynamicTyping: false,
+    transformHeader: (header) =>
+      header.replace(/^\uFEFF/, "").trim().toLowerCase(),
+  });
 
-    if (char === '"') {
-      inQuotes = true;
-    } else if (char === ",") {
-      row.push(field.trim());
-      field = "";
-    } else if (char === "\n" || char === "\r") {
-      if (char === "\r" && csv[i + 1] === "\n") {
-        i++;
-      }
+  if (result.errors.length > 0) {
+    const error = result.errors[0];
 
-      row.push(field.trim());
-      field = "";
-
-      if (row.some((value) => value !== "")) {
-        rows.push(row);
-      }
-
-      row = [];
-    } else {
-      field += char;
-    }
-  }
-
-  row.push(field.trim());
-
-  if (row.some((value) => value !== "")) {
-    rows.push(row);
-  }
-
-  return rows;
-}
-
-function parseNumber(
-  value: string | undefined,
-  column: string,
-  geography: string
-): number {
-  if (value === undefined || value.trim() === "") {
-    throw new Error(`Missing ${column} value for ${geography}.`);
-  }
-
-  const number = Number(value);
-
-  if (!Number.isFinite(number)) {
     throw new Error(
-      `Invalid ${column} value for ${geography}: ${value}`
+      `Unable to parse election CSV: ${error.message}`
     );
   }
 
-  return number;
-}
-
-function parseCandidates(
-  row: string[],
-  getValue: (row: string[], column: string) => string,
-  geography: string
-): [CandidateResult, CandidateResult] {
-  const aShare = parseNumber(
-    getValue(row, "A_SHARE"),
-    "A_SHARE",
-    geography
-  );
-
-  const bShare = parseNumber(
-    getValue(row, "B_SHARE"),
-    "B_SHARE",
-    geography
-  );
-
-  const aTotal = parseNumber(
-    getValue(row, "A_TOTAL"),
-    "A_TOTAL",
-    geography
-  );
-
-  const bTotal = parseNumber(
-    getValue(row, "B_TOTAL"),
-    "B_TOTAL",
-    geography
-  );
-
-  if (
-    aShare < 0 ||
-    aShare > 100 ||
-    bShare < 0 ||
-    bShare > 100
-  ) {
-    throw new Error(`Invalid percentage values for ${geography}.`);
+  if (result.meta.renamedHeaders) {
+    throw new Error(
+      "The election CSV contains duplicate column headers."
+    );
   }
 
-  if (aTotal < 0 || bTotal < 0) {
-    throw new Error(`Invalid vote totals for ${geography}.`);
+  if (!result.meta.fields || result.meta.fields.length === 0) {
+    throw new Error("The election CSV is missing its header row.");
   }
 
-  return [
-    {
-      name: "Option A",
-      percentage: aShare,
-      total: aTotal,
-    },
-    {
-      name: "Option B",
-      percentage: bShare,
-      total: bTotal,
-    },
-  ];
+  if (result.data.length === 0) {
+    throw new Error("The election CSV contains no data.");
+  }
+
+  // Papa Parse stores fields beyond the header row in __parsed_extra.
+  // Reject those rows rather than silently ignoring unexpected columns.
+  for (const row of result.data) {
+    if ("__parsed_extra" in row) {
+      throw new Error(
+        "The election CSV contains a row with more columns than its header."
+      );
+    }
+  }
+
+  return result.data;
 }
 
-function createColumnGetter(headers: string[]) {
-  const columnIndex = new globalThis.Map(
-    headers.map((header, index) => [header, index])
-  );
+function validateColumns(
+  rows: CSVRow[],
+  requiredColumns: string[]
+): void {
+  if (rows.length === 0) {
+    throw new Error("The election CSV contains no data.");
+  }
 
-  const requiredColumns = [
-    "VALUE",
-    "LEAN",
-    "COOL_NAME",
-    "A_SHARE",
-    "B_SHARE",
-    "A_TOTAL",
-    "B_TOTAL",
-  ];
+  const availableColumns = Object.keys(rows[0]);
 
   for (const column of requiredColumns) {
-    if (!columnIndex.has(column)) {
+    if (!availableColumns.includes(column)) {
       throw new Error(
         `Missing required spreadsheet column: ${column}`
       );
     }
   }
-
-  return {
-    has: (column: string) => columnIndex.has(column),
-
-    get: (row: string[], column: string): string => {
-      const index = columnIndex.get(column);
-      return index === undefined ? "" : (row[index] ?? "").trim();
-    },
-  };
 }
 
-async function fetchCSV(url: string): Promise<string[][]> {
-  const response = await fetch(url, { cache: "no-store" });
+async function fetchCSV(url: string): Promise<CSVRow[]> {
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error(
@@ -220,149 +150,492 @@ async function fetchCSV(url: string): Promise<string[][]> {
     );
   }
 
-  const rows = parseCSV(await response.text());
-
-  if (rows.length < 2) {
-    throw new Error("The election spreadsheet contains no data.");
-  }
-
-  return rows;
+  return parseCSV(await response.text());
 }
 
-function createResult(
-  row: string[],
-  getValue: (row: string[], column: string) => string,
-  geography: ElectionGeography
-): ElectionResult {
-  const label =
-    geography.type === "region"
-      ? geography.name
-      : geography.name ?? geography.fips;
+// -----------------------------------------------------------------------------
+// General helpers
+// -----------------------------------------------------------------------------
+
+function parseVotes(
+  value: string | undefined,
+  candidate: string,
+  geography: string
+): number {
+  if (value === undefined || value.trim() === "") {
+    throw new Error(
+      `Missing vote total for ${candidate} in ${geography}.`
+    );
+  }
+
+  const votes = Number(value);
+
+  if (!Number.isSafeInteger(votes) || votes < 0) {
+    throw new Error(
+      `Invalid vote total for ${candidate} in ${geography}: ${value}`
+    );
+  }
+
+  return votes;
+}
+
+function parseLatestTimestamp(rows: CSVRow[]): string {
+  const timestamps = rows
+    .map((row) => row.latest_timestamp?.trim())
+    .filter((value): value is string => Boolean(value));
+
+  if (timestamps.length === 0) {
+    throw new Error(
+      "The results spreadsheet contains no populated latest_timestamp values."
+    );
+  }
+
+  const parsedTimestamps = timestamps.map((timestamp) => {
+    // Google Sheets format: M/D/YYYY H:MM:SS
+    const match = timestamp.match(
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/
+    );
+
+    if (!match) {
+      throw new Error(
+        `Invalid latest_timestamp in results spreadsheet: ${timestamp}`
+      );
+    }
+
+    const [, month, day, year, hour, minute, second] = match;
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second)
+    );
+
+    // Validate the date components to catch invalid dates.
+    if (
+      date.getFullYear() !== Number(year) ||
+      date.getMonth() !== Number(month) - 1 ||
+      date.getDate() !== Number(day) ||
+      date.getHours() !== Number(hour) ||
+      date.getMinutes() !== Number(minute) ||
+      date.getSeconds() !== Number(second)
+    ) {
+      throw new Error(
+        `Invalid latest_timestamp in results spreadsheet: ${timestamp}`
+      );
+    }
+
+    return { timestamp, time: date.getTime() };
+  });
+
+  return parsedTimestamps.reduce((latest, current) =>
+    current.time > latest.time ? current : latest
+  ).timestamp;
+}
+
+function createCandidateResults(
+  optionNames: CandidateNames,
+  optionATotal: number,
+  optionBTotal: number
+): [CandidateResult, CandidateResult] {
+  const totalVotes = optionATotal + optionBTotal;
+
+  return [
+    {
+      name: optionNames.optionA,
+      total: optionATotal,
+      percentage:
+        totalVotes === 0 ? 0 : (optionATotal / totalVotes) * 100,
+    },
+    {
+      name: optionNames.optionB,
+      total: optionBTotal,
+      percentage:
+        totalVotes === 0 ? 0 : (optionBTotal / totalVotes) * 100,
+    },
+  ];
+}
+
+function getOptionNames(
+  optionNames: ElectionOptionNames,
+  race: ElectionRace
+): CandidateNames {
+  const names = optionNames[race];
+
+  if (!names) {
+    throw new Error(`Missing option names for ${race}.`);
+  }
+
+  return names;
+}
+
+function getRace(value: string): ElectionRace {
+  if (value === "National") {
+    return value;
+  }
+
+  if (CENSUS_REGIONS.includes(value as CensusRegion)) {
+    return value as CensusRegion;
+  }
+
+  throw new Error(`Unknown election: ${value}`);
+}
+
+// Build the reverse lookup used by National results, whose geography IDs
+// are the nicknames rather than the canonical Census region names.
+const REGION_BY_NICKNAME = Object.fromEntries(
+  Object.entries(GEOGRAPHY_NICKNAMES).map(([region, nickname]) => [
+    nickname,
+    region,
+  ])
+) as Record<string, CensusRegion>;
+
+// -----------------------------------------------------------------------------
+// Candidate names
+// -----------------------------------------------------------------------------
+
+/**
+ * Loads candidate names from the options spreadsheet.
+ *
+ * Required columns:
+ * election, option_a, option_b
+ */
+export async function fetchElectionOptionNames(
+  csvUrl: string = ELECTION_OPTIONS_CSV_URL
+): Promise<ElectionOptionNames> {
+  const rows = await fetchCSV(csvUrl);
+
+  validateColumns(rows, [
+    "election",
+    "option_a",
+    "option_b",
+  ]);
+
+  const options: Partial<ElectionOptionNames> = {};
+
+  for (const row of rows) {
+    const raceValue = row.election?.trim();
+    const optionA = row.option_a?.trim();
+    const optionB = row.option_b?.trim();
+
+    if (!raceValue) continue;
+
+    const race = getRace(raceValue);
+
+    if (!optionA || !optionB) {
+      throw new Error(
+        `Missing candidate names for ${race}.`
+      );
+    }
+
+    if (options[race]) {
+      throw new Error(
+        `Duplicate options spreadsheet entry for ${race}.`
+      );
+    }
+
+    options[race] = {
+      optionA,
+      optionB,
+    };
+  }
+
+  const missingRaces = [
+    "National",
+    ...CENSUS_REGIONS,
+  ].filter((race) => !options[race as ElectionRace]);
+
+  if (missingRaces.length > 0) {
+    throw new Error(
+      `Missing candidate names for: ${missingRaces.join(", ")}.`
+    );
+  }
+
+  return options as ElectionOptionNames;
+}
+
+// -----------------------------------------------------------------------------
+// Election results
+// -----------------------------------------------------------------------------
+
+type GeographyTotals = {
+  geography: ElectionGeography;
+  coolName: string;
+  optionATotal: number;
+  optionBTotal: number;
+};
+
+/**
+ * Loads and transforms the normalized results spreadsheet.
+ *
+ * Required columns:
+ * election, geography_type, geography_id, candidate, votes, latest_timestamp
+ *
+ * National rows use Census-region nicknames as geography IDs.
+ * Regional-election rows use state names as geography IDs.
+ */
+export async function fetchElectionResults(
+  csvUrl: string,
+  optionNames: ElectionOptionNames
+): Promise<ElectionData> {
+  const rows = await fetchCSV(csvUrl);
+
+  validateColumns(rows, [
+    "election",
+    "geography_type",
+    "geography_id",
+    "candidate",
+    "votes",
+    "latest_timestamp",
+  ]);
+
+  const lastUpdated = parseLatestTimestamp(rows);
+
+  const geographyTotals = new Map<
+    string,
+    GeographyTotals
+  >();
+
+  const seenCandidates = new Set<string>();
+
+  for (const row of rows) {
+    const raceValue = row.election?.trim();
+    const geographyType = row.geography_type?.trim().toLowerCase();
+    const geographyId = row.geography_id?.trim();
+    const candidate = row.candidate?.trim();
+
+    if (!raceValue || !geographyId || !candidate) {
+      throw new Error(
+        "The results spreadsheet contains a row with missing required values."
+      );
+    }
+
+    const race = getRace(raceValue);
+    const names = getOptionNames(optionNames, race);
+
+    let geography: ElectionGeography;
+    let coolName: string;
+
+    if (race === "National") {
+      if (geographyType !== "region") {
+        throw new Error(
+          `National results must use region geography: ${geographyId}.`
+        );
+      }
+
+      const region = REGION_BY_NICKNAME[geographyId];
+
+      if (!region) {
+        throw new Error(
+          `Unknown National geography nickname: ${geographyId}.`
+        );
+      }
+
+      geography = {
+        type: "region",
+        id: region,
+        name: region,
+      };
+
+      coolName = geographyId;
+    } else {
+      if (geographyType !== "state") {
+        throw new Error(
+          `${race} results must use state geography: ${geographyId}.`
+        );
+      }
+
+      const fips = STATE_FIPS[geographyId];
+
+      if (!fips) {
+        throw new Error(
+          `Unknown state in results spreadsheet: ${geographyId}.`
+        );
+      }
+
+      geography = {
+        type: "state",
+        fips,
+        name: geographyId,
+        region: race,
+      };
+
+      coolName = GEOGRAPHY_NICKNAMES[race];
+    }
+
+    let candidateIndex: 0 | 1;
+
+    if (candidate === names.optionA) {
+      candidateIndex = 0;
+    } else if (candidate === names.optionB) {
+      candidateIndex = 1;
+    } else {
+      throw new Error(
+        `Unknown candidate "${candidate}" for ${race}.`
+      );
+    }
+
+    const geographyKey =
+      `${race}:${geographyType}:${geographyId}`;
+
+    const candidateKey = `${geographyKey}:${candidate}`;
+
+    if (seenCandidates.has(candidateKey)) {
+      throw new Error(
+        `Duplicate result for ${candidate} in ${geographyId} (${race}).`
+      );
+    }
+
+    seenCandidates.add(candidateKey);
+
+    const votes = parseVotes(
+      row.votes,
+      candidate,
+      geographyId
+    );
+
+    let totals = geographyTotals.get(geographyKey);
+
+    if (!totals) {
+      totals = {
+        geography,
+        coolName,
+        optionATotal: 0,
+        optionBTotal: 0,
+      };
+
+      geographyTotals.set(geographyKey, totals);
+    }
+
+    if (candidateIndex === 0) {
+      totals.optionATotal = votes;
+    } else {
+      totals.optionBTotal = votes;
+    }
+  }
+
+  // Every geography must have a row for both candidates, including
+  // candidates who received zero votes.
+  const resultsByRace = new Map<
+    ElectionRace,
+    ElectionResult[]
+  >();
+
+  for (const [key, totals] of geographyTotals) {
+    const race = key.split(":")[0] as ElectionRace;
+    const names = getOptionNames(optionNames, race);
+
+    const geographyKey =
+      key.split(":").slice(1).join(":");
+
+    const candidateNames = [
+      names.optionA,
+      names.optionB,
+    ];
+
+    for (const candidate of candidateNames) {
+      if (!seenCandidates.has(`${race}:${geographyKey}:${candidate}`)) {
+        throw new Error(
+          `Missing result for ${candidate} in ${geographyKey} (${race}).`
+        );
+      }
+    }
+
+    const result: ElectionResult = {
+      geography: totals.geography,
+      coolName: totals.coolName,
+      candidates: createCandidateResults(
+        names,
+        totals.optionATotal,
+        totals.optionBTotal
+      ),
+    };
+
+    const raceResults = resultsByRace.get(race) ?? [];
+    raceResults.push(result);
+    resultsByRace.set(race, raceResults);
+  }
+
+  const regions = resultsByRace.get("National") ?? [];
+
+  if (regions.length !== CENSUS_REGIONS.length) {
+    throw new Error(
+      `Expected ${CENSUS_REGIONS.length} National region results, but found ${regions.length}.`
+    );
+  }
+
+  const missingRegions = CENSUS_REGIONS.filter(
+    (region) =>
+      !regions.some(
+        (result) =>
+          result.geography.type === "region" &&
+          result.geography.id === region
+      )
+  );
+
+  if (missingRegions.length > 0) {
+    throw new Error(
+      `Missing National results for: ${missingRegions.join(", ")}.`
+    );
+  }
+
+  const states = CENSUS_REGIONS.flatMap(
+    (region) => resultsByRace.get(region) ?? []
+  );
+
+  if (states.length === 0) {
+    throw new Error("The results spreadsheet contains no state results.");
+  }
 
   return {
-    geography,
-    value: parseNumber(
-      getValue(row, "VALUE"),
-      "VALUE",
-      label
+    states,
+    regions,
+    national: summarizeElectionResults(
+      regions,
+      getOptionNames(optionNames, "National")
     ),
-    lean: getValue(row, "LEAN"),
-    coolName: getValue(row, "COOL_NAME"),
-    candidates: parseCandidates(row, getValue, label),
+    lastUpdated,
   };
 }
 
-/**
- * Loads a CSV containing one result per Census region.
- *
- * Required geographic column: CENSUS_REG_NAME
- */
-export async function fetchRegionElectionResults(
-  csvUrl: string
-): Promise<ElectionResult[]> {
-  const rows = await fetchCSV(csvUrl);
-  const headers = rows[0].map((header) => header.trim());
-  const columns = createColumnGetter(headers);
+// -----------------------------------------------------------------------------
+// Summaries
+// -----------------------------------------------------------------------------
 
-  if (!headers.includes("CENSUS_REG_NAME")) {
-    throw new Error(
-      "Missing required spreadsheet column: CENSUS_REG_NAME"
-    );
-  }
-
-  const results: ElectionResult[] = [];
-  const seen = new Set<CensusRegion>();
-
-  for (const row of rows.slice(1)) {
-    const region = columns.get(row, "CENSUS_REG_NAME");
-
-    if (!region) continue;
-
-    if (!EXPECTED_REGIONS.includes(region as CensusRegion)) {
-      throw new Error(`Unknown Census region: ${region}`);
-    }
-
-    const regionId = region as CensusRegion;
-
-    if (seen.has(regionId)) {
-      throw new Error(`Duplicate spreadsheet entry for ${region}.`);
-    }
-
-    seen.add(regionId);
-
-    results.push(
-      createResult(row, columns.get, {
-        type: "region",
-        id: regionId,
-        name: regionId,
-      })
-    );
-  }
-
-  const missing = EXPECTED_REGIONS.filter(
-    (region) => !seen.has(region)
+export function summarizeElectionResults(
+  results: ElectionResult[],
+  names: CandidateNames
+): NationalElectionSummary {
+  const optionATotal = results.reduce(
+    (sum, result) => sum + result.candidates[0].total,
+    0
   );
 
-  if (missing.length > 0) {
-    throw new Error(`Missing region data: ${missing.join(", ")}`);
-  }
+  const optionBTotal = results.reduce(
+    (sum, result) => sum + result.candidates[1].total,
+    0
+  );
 
-  return results;
+  return {
+    candidates: createCandidateResults(
+      names,
+      optionATotal,
+      optionBTotal
+    ),
+  };
 }
 
-/**
- * Loads a CSV containing one result per state.
- *
- * Required geographic column: FIPS
- *
- * FIPS values are normalized to two digits.
- */
-export async function fetchStateElectionResults(
-  csvUrl: string
-): Promise<ElectionResult[]> {
-  const rows = await fetchCSV(csvUrl);
-  const headers = rows[0].map((header) => header.trim());
-  const columns = createColumnGetter(headers);
+// -----------------------------------------------------------------------------
+// Main data loader
+// -----------------------------------------------------------------------------
 
-  if (!headers.includes("FIPS")) {
-    throw new Error("Missing required spreadsheet column: FIPS");
-  }
+export async function fetchElectionData(
+  optionsCsvUrl: string = ELECTION_OPTIONS_CSV_URL,
+  resultsCsvUrl: string = ELECTION_RESULTS_CSV_URL
+): Promise<ElectionData> {
+  const optionNames = await fetchElectionOptionNames(optionsCsvUrl);
 
-  const results: ElectionResult[] = [];
-  const seen = new Set<string>();
-
-  for (const row of rows.slice(1)) {
-    const rawFips = columns.get(row, "FIPS");
-
-    if (!rawFips) continue;
-
-    if (!/^\d{1,2}$/.test(rawFips)) {
-      throw new Error(`Invalid FIPS code: ${rawFips}`);
-    }
-
-    const fips = rawFips.padStart(2, "0");
-
-    if (!VALID_STATE_FIPS.has(fips)) {
-      throw new Error(`Unknown state FIPS code: ${fips}`);
-    }
-
-    if (seen.has(fips)) {
-      throw new Error(`Duplicate spreadsheet entry for FIPS ${fips}.`);
-    }
-
-    seen.add(fips);
-
-    results.push(
-      createResult(row, columns.get, {
-        type: "state",
-        fips,
-      })
-    );
-  }
-
-  if (results.length === 0) {
-    throw new Error("The state spreadsheet contains no state data.");
-  }
-
-  return results;
+  return fetchElectionResults(resultsCsvUrl, optionNames);
 }

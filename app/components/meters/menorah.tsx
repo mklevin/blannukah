@@ -1,12 +1,13 @@
 
 "use client";
+import { useElectionData } from "@/app/components/election-data-provider";
 
 type VoteShareMenorahProps = {
-  optionAShare?: number;
-  optionATotal?: number;
-  optionBTotal?: number;
-  optionAName?: string;
-  optionBName?: string;
+  optionAShare: number;
+  optionATotal: number;
+  optionBTotal: number;
+  optionAName: string;
+  optionBName: string;
 };
 
 const OPTION_A_COLOR = "var(--map-option-a, #4e79a7)";
@@ -78,9 +79,29 @@ function Flame({
         d={FLAME_PATH}
         fill={active ? color : MUTED_COLOR}
         style={{
+          transformBox: "fill-box",
+          transformOrigin: "center bottom",
           transition: "fill 350ms ease",
         }}
-      />
+      >
+        {active && (
+          <>
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              values="1 1; 0.96 1.04; 1.03 0.97; 0.98 1.03; 1 1"
+              dur="1.4s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="1; 0.88; 1; 0.93; 1"
+              dur="1.1s"
+              repeatCount="indefinite"
+            />
+          </>
+        )}
+      </path>
     </svg>
   );
 }
@@ -117,20 +138,40 @@ function CandidateLabel({
   );
 }
 
-export default function VoteShareMenorah({
-  optionAShare = 0.64,
-  optionATotal = 125000,
-  optionBTotal = 70312,
-  optionAName = "Candidate A",
-  optionBName = "Candidate B",
-}: VoteShareMenorahProps) {
+export default function VoteShareMenorah() {
+  const { data, loading, error } = useElectionData();
+
+  if (loading) {
+    return <p role="status">Loading Menorah…</p>;
+  }
+
+  if (error) {
+    return <p role="alert">{error}</p>;
+  }
+
+  const national = data?.national;
+
+  if (!national) {
+    return null;
+  }
+
+  const optionAName = national.candidates[0].name;
+  const optionBName = national.candidates[1].name;
+
+  const optionATotal = national.candidates[0].total;
+  const optionBTotal = national.candidates[1].total;
+
+  const totalVotes = optionATotal + optionBTotal;
+
+  const optionAShare =
+    totalVotes > 0 ? optionATotal / totalVotes : 0;
+
   const safeShare = Math.max(0, Math.min(1, optionAShare));
 
   // 100% Option A = leftmost branch.
   // 100% Option B = rightmost branch.
-  const activeIndex = Math.round((1 - safeShare) * 7);
-
-  const isTossup = safeShare >= 3 / 7 && safeShare <= 4 / 7;
+  const isTossup = safeShare === 0.5;
+  const activeIndex = isTossup ? -1 : Math.round((1 - safeShare) * 7);
   const isOptionALeading = safeShare > 0.5;
 
   const leaderColor = isTossup
@@ -258,8 +299,8 @@ export default function VoteShareMenorah({
           <Flame
             x={450}
             y={-20}
-            color={STRUCTURE_COLOR}
-            active={false}
+            color={TIE_COLOR}
+            active={isTossup}
           />
         </svg>
       </div>

@@ -1,27 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import StateMap from "@/app/components/state-map";
-import {
-  fetchStateElectionResults,
-  type ElectionResult,
-} from "@/app/lib/election-data";
-
-const NORTHEAST_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNeiMncTFwe-g1VXNRRUrznZrgjEUH0c4aS_DYK9qUXc5oWLd-PiDdXVr0bZ6x8cilPM6sbELDE5et/pub?gid=962697077&single=true&output=csv";
+import { useElectionData } from "@/app/components/election-data-provider";
 
 export default function NortheastElectionMap() {
-  const [results, setResults] = useState<ElectionResult[] | null>(null);
+  const { data, loading, error } = useElectionData();
 
-  useEffect(() => {
-    fetchStateElectionResults(NORTHEAST_CSV_URL).then(setResults);
-  }, []);
+  if (error) return <p role="alert">{error}</p>;
 
-  if (!results) return <p role="status">Loading map…</p>;
+  if (loading || !data) {
+    return <p role="status">Loading map…</p>;
+  }
+
+  const northeast = data.states.filter(
+    (result) =>
+      result.geography.type === "state" &&
+      result.geography.region === "Northeast"
+  );
 
   return (
     <StateMap
       region="Northeast"
-      results={results}
+      results={northeast}
       maxSize="20em"
       minSize="20em"
     />

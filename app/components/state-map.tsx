@@ -1,10 +1,8 @@
 
 "use client";
 
-import type {
-  CensusRegion,
-  ElectionResult,
-} from "@/app/lib/election-data";
+import type { CensusRegion } from "@/app/lib/constants/geography";
+import type { ElectionResult } from "@/app/lib/election-data";
 
 import { MapVisualization } from "@/app/components/map/map-visualization";
 
@@ -26,7 +24,6 @@ export type StateMapProps = {
    */
   maxSize?: string;
 
-  
   /**
    * Minimum map width, expressed as a CSS length.
    * Examples: "60em", "900px", "100%".
@@ -38,7 +35,7 @@ export default function StateMap({
   region,
   results,
   maxSize = "60em",
-  minSize = "10em"
+  minSize = "10em",
 }: StateMapProps) {
   return (
     <MapVisualization

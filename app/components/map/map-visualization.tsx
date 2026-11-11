@@ -5,10 +5,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import * as Plot from "@observablehq/plot";
 import { geoAlbersUsa } from "d3";
 
-import {
-  type CensusRegion,
-  type ElectionResult,
-} from "@/app/lib/election-data";
+import type { CensusRegion } from "@/app/lib/constants/geography";
+import type { ElectionResult } from "@/app/lib/election-data";
 
 import {
   REGION_FIPS,
@@ -41,8 +39,11 @@ const OPTION_COLORS = {
 type MapCategory = keyof typeof OPTION_COLORS;
 
 function getMapCategory(result: ElectionResult): MapCategory {
-  if (result.value === 0) return "Tie";
-  return result.value > 0 ? "Option A" : "Option B";
+  const [optionA, optionB] = result.candidates;
+
+  if (optionA.total === optionB.total) return "Tie";
+
+  return optionA.total > optionB.total ? "Option A" : "Option B";
 }
 
 function getCssColor(
@@ -272,7 +273,7 @@ export function MapVisualization({
     chart.style.height = "auto";
     container.appendChild(chart);
 
-    const legend = createLegend();
+    const legend = createLegend(results[0].candidates);
     legend.style.marginTop = "1.5rem";
     container.appendChild(legend);
 
