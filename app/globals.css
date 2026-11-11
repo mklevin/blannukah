@@ -91,6 +91,7 @@ h3 {
     padding: 0.1em 1.2em;
     border-bottom: 1px solid var(--divider-color);
     align-items: center;
+    height: 3.5em;
 
     background-color: white;
 }

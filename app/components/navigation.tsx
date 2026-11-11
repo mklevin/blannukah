@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Navigation() {
     return (
         <div className="navigation flex sticky">
-            <span className="logo">
+            <span className="logo hidden sm:block">
                 <Link href="/">B</Link>
             </span>
             <div className="nav-items flex">
