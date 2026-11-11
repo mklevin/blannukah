@@ -164,7 +164,7 @@ export default function VoteShareMenorah() {
   const totalVotes = optionATotal + optionBTotal;
 
   const optionAShare =
-    totalVotes > 0 ? optionATotal / totalVotes : 0;
+    totalVotes > 0 ? optionATotal / totalVotes : 0.5;
 
   const safeShare = Math.max(0, Math.min(1, optionAShare));
 
