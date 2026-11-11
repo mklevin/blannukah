@@ -29,6 +29,10 @@ export default function RootLayout({
     <html lang="en" className={`${franklin.className} ${manufact.className}`}>
       <head>
         <link rel="preconnect" href="https://github.io/" />
+        <link
+          rel="stylesheet"
+          href="https://vetrivelcsamy.github.io/libre-cheltenham/librecheltenham.css"
+        />
       </head>
       <body>
         <ElectionDataProvider>
