@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Libre_Franklin, Manufacturing_Consent } from 'next/font/google';
 import './globals.css';
 
+
+import { ElectionDataProvider } from "@/app/components/election-data-provider";
+
 export const metadata: Metadata = {
   title: 'Matt\'s Hanukkah List 2026 Election',
   description: 'The most important election of the year.',
@@ -27,7 +30,11 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://github.io/" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ElectionDataProvider>
+          {children}
+        </ElectionDataProvider>
+      </body>
     </html>
   );
 }

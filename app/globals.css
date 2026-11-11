@@ -9,6 +9,8 @@
     --subdivider-color: var(--title-color);
     --footer-color: rgb(102, 102, 102);
     --live-color: rgb(208, 2, 27);
+    --button-color: rgb(86, 123, 149);
+    --button-border-color: rgb(50, 104, 145);
 
     /* Map colors */
     --map-option-a: #4e79a7;
@@ -47,6 +49,12 @@ header .title {
     margin: 1.5em 6%;
 }
 
+div.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
 h1 {
     font-family: "librecheltenham", serif;
     font-size: 2.5em;
@@ -78,6 +86,55 @@ h3 {
     letter-spacing: -0.03em;
     color: var(--subtitle-color);
     margin-bottom: 0.5em;
+}
+
+.navigation {
+    padding: 0.1em 1.2em;
+    border-bottom: 1px solid var(--divider-color);
+    align-items: center;
+
+    background-color: white;
+}
+
+.navigation .logo {
+    font-family: "Manufacturing Consent";
+    font-size: 2.3em;
+    margin-right: 1em;
+    padding-bottom: 0.1em;
+}
+
+.navigation .nav-items {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+
+    font-family: "Libre Franklin";
+    font-size: 0.90em;
+    color: var(--title-color);
+}
+
+.navigation .nav-items a {
+    padding-right: 1.5em;
+}
+
+.navigation .vote-link {
+    margin-left: auto;
+    margin-right: 1em;
+    height: 1.5em;
+    cursor: pointer;
+
+    background-color: var(--button-color);
+    border-radius: 4px;
+    border: 1px solid var(--button-border-color);
+}
+
+.navigation .vote-link a {
+    padding: 1.2em;
+
+    font-size: 0.8em;
+    font-weight: 600; 
+    color: white;
 }
 
 .live-indicator {
@@ -222,4 +279,15 @@ footer a:hover {
   .page-loading__spinner {
     animation: none;
   }
+}
+
+.faq {
+    margin: 2em 0;
+}
+
+.faq p {
+    margin-top: 0.5em;
+
+    font-family: "Libre Franklin";
+    color: var(--subtitle-color);
 }

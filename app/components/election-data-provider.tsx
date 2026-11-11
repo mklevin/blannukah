@@ -76,7 +76,7 @@ export function ElectionDataProvider({
       {loading ? (
         <div className="page-loading" role="status">
           <div className="page-loading__spinner" />
-          <p>Loading election results…</p>
+          <p>Loading election data...</p>
         </div>
       ) : error ? (
         <div className="page-loading" role="alert">

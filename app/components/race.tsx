@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import VoteShareGauge from "@/app/components/meters/gauge";
-import { CensusRegion } from "../lib/election-data";
+import type { CensusRegion } from "@/app/lib/constants/geography";
 
 type RaceProps = {
   name: string;
@@ -10,7 +10,7 @@ type RaceProps = {
   spacer?: boolean;
 };
 
-export default function Race({
+export default function Race ({
   name,
   description,
   map,
