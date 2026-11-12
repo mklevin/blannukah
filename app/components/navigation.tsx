@@ -13,8 +13,8 @@ function NavLink({href, text}: NavLinkProps) {
     const pathname = usePathname();
 
     return (<Link 
-                href={href} 
-                className={`${pathname === href.toString() ? 'active' : ''}`}>
+        href={href} 
+        className={`${pathname === href.toString() ? 'active' : ''}`}>
         {text}
     </Link>);
 }
