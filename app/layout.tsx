@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Libre_Franklin, Manufacturing_Consent } from 'next/font/google';
+import { Libre_Franklin, Manufacturing_Consent, PT_Serif } from 'next/font/google';
 import './globals.css';
 
 
@@ -20,13 +20,18 @@ const manufact = Manufacturing_Consent({
   weight: '400'
 });
 
+const ptSerif = PT_Serif({
+  subsets: ['latin'],
+  weight: '400'
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${franklin.className} ${manufact.className}`}>
+    <html lang="en" className={`${franklin.className} ${manufact.className} ${ptSerif.className}`}>
       <head>
         <link rel="preconnect" href="https://github.io/" />
         <link

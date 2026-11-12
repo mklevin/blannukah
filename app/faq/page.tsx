@@ -1,24 +1,29 @@
+import Link from "next/link";
 import Logo from "@/app/components/logo";
 import Navigation from "@/app/components/navigation";
+
+import { faqs } from "./faqs";
 
 export default function Page() {
     return (
         <div>
             <Logo />
             <Navigation />
-            <div className="mainContent">
+            <div className="main-content">
                 <h1>Frequently Asked Questions</h1>
 
-                <div className="faq">
-                    <h2>What is this?</h2>
-                    <p>This is an election! More words to come soon.</p>
-                </div>
-
-                <div className="faq">
-                    <h2>Why is this?</h2>
-                    <p>Because our world needs more whimsy?</p>
-                </div>
+                {faqs.map((faq) => (
+                  <div className="faq" key={faq.question}>
+                    <h2 dangerouslySetInnerHTML={{ __html: faq.question }} />
+                      {faq.answer.map((paragraph, index) => (
+                        <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
+                      ))}
+                  </div>
+                ))}
             </div>
+            <footer>
+                <span><Link href="https://mattlevin.io">© 2026 The Blue York Rhymes Company</Link></span>
+            </footer>
         </div>
     );
 }

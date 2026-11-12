@@ -6,8 +6,10 @@
     --subtitle-color: rgb(54, 54, 54);
     --divider-color: rgb(223, 223, 223);
     --subdivider-color: var(--title-color);
+    --subtext-color: rgb(139, 139, 139);
     --footer-color: rgb(102, 102, 102);
     --live-color: rgb(208, 2, 27);
+    --link-color: rgb(50, 104, 145);
 
     --button-color: rgb(86, 123, 149);
     --button-hover-color: rgb(50, 104, 145);
@@ -46,8 +48,30 @@ header .title {
     letter-spacing: -0.03em;
 }
 
-.mainContent {
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.main-content {
     margin: 1.5em 6%;
+}
+
+footer {
+    margin: 2em 0 2em 0;
+    font-family: "Libre Franklin";
+    font-size: 0.7em;
+    text-align: center;
+    color: var(--footer-color);
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 div.sticky {
@@ -198,6 +222,16 @@ p {
     margin-bottom: 1em;
 }
 
+.individual-race .author {
+    font-size: 0.8em;
+    line-height: 0.9em;
+}
+
+.individual-race .job {
+    font-size: 0.8em;
+    color: var(--subtext-color);
+}
+
 .datawrapper-container {
     padding-top: 1em;
 
@@ -213,18 +247,6 @@ p {
 
 .map-spacer {
     height: 1em;
-}
-
-footer {
-    margin: 2em 0 1em 0;
-    font-family: "Libre Franklin";
-    font-size: 0.7em;
-    text-align: center;
-    color: var(--footer-color);
-}
-
-footer a:hover {
-    text-decoration: underline;
 }
 
 .map-legend {
@@ -259,6 +281,12 @@ footer a:hover {
 
 .map-hit-area path:focus {
   outline: none;
+}
+
+.latest-updates-button {
+  @apply flex h-7 w-7 cursor-pointer items-center justify-center
+    rounded-full border border-gray-400 bg-transparent
+    transition-colors hover:bg-gray-200;
 }
 
 .page-loading {
@@ -309,4 +337,72 @@ footer a:hover {
 
 .faq p {
     margin-top: 0.5em;
+
+    font-family: "PT Serif", serif;
+    font-size: 1.18em;
+    letter-spacing: -0.005em;
+}
+
+.faq p a {
+    text-decoration: underline;
+    color: var(--link-color);
+}
+
+.faq p a:hover {
+    text-decoration: none;
+}
+
+.credits-author-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 48px 32px;
+  margin: 48px auto 0;
+  max-width: 976px;;
+}
+
+.credits-author {
+  display: flex;
+  flex: 0 1 220px;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.credits-author-image {
+  display: block;
+  width: 192px;
+  height: 192px;
+  min-width: 192px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(100%);
+}
+
+.credits-author-info {
+  margin-top: 12px;
+}
+
+.credits-author-name {
+  margin: 0;
+
+  font-family: "librecheltenham", serif;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+  color: var(--title-color);
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.3em;
+}
+
+.credits-author-title {
+  font-size: 14px;
+  color: var(--subtext-color);
+}
+
+.credits-author-credit {
+  margin-top: 2px;
+  font-size: 16px;
 }
