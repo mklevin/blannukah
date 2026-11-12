@@ -21,6 +21,10 @@ function NavLink({href, text}: NavLinkProps) {
 
 export default function Navigation() {
   const pathname = usePathname();
+  console.log({
+    pathname,
+    liveResultsHref: document.querySelector(".nav-items a")?.getAttribute("href"),
+  });
 
   return (
     <div className="navigation flex sticky">
