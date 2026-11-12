@@ -14,8 +14,7 @@ function NavLink({href, text}: NavLinkProps) {
 
     return (<Link 
                 href={href} 
-                className={`${pathname === href.toString() ? 'active' : ''}`}
-                prefetch={true}>
+                className={`${pathname === href.toString() ? 'active' : ''}`}>
         {text}
     </Link>);
 }
