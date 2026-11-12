@@ -8,8 +8,10 @@
     --subdivider-color: var(--title-color);
     --footer-color: rgb(102, 102, 102);
     --live-color: rgb(208, 2, 27);
+
     --button-color: rgb(86, 123, 149);
-    --button-border-color: rgb(50, 104, 145);
+    --button-hover-color: rgb(50, 104, 145);
+    --button-border-color: var(--button-hover-color);
 
     /* Map colors */
     --map-option-a: #4e79a7;
@@ -79,6 +81,13 @@ h3 {
     padding-top: 0.3em;
 }
 
+p {
+    font-family: "Libre Franklin";
+    font-size: 0.95em;
+    letter-spacing: -0.03em;
+    color: var(--subtitle-color);
+}
+
 .subtext {
     font-family: "Georgia";
     font-size: 1.25em;
@@ -116,17 +125,28 @@ h3 {
 
 .navigation .nav-items a {
     padding-right: 1.5em;
+    padding-top: 0.3em;
+}
+
+.navigation .nav-items .active {
+    font-weight: 600;
 }
 
 .navigation .vote-link {
     margin-left: auto;
     margin-right: 1%;
-    height: 1.6em;
+    padding-top: 0.2em;
+    height: 2em;
     cursor: pointer;
 
     background-color: var(--button-color);
+    transition: all .2s ease-in;
     border-radius: 4px;
     border: 1px solid var(--button-border-color);
+}
+
+.navigation .vote-link:hover {
+    background-color: var(--button-hover-color);
 }
 
 .navigation .vote-link a {
@@ -135,6 +155,7 @@ h3 {
     font-size: 0.8em;
     font-weight: 600; 
     color: white;
+    text-transform: uppercase;
 }
 
 .live-indicator {
@@ -170,10 +191,6 @@ h3 {
 }
 
 .senatorials p {
-    font-family: "Libre Franklin";
-    font-size: 0.95em;
-    letter-spacing: -0.03em;
-    color: var(--subtitle-color);
     padding-top: 0.3em;
 }
 
@@ -256,8 +273,13 @@ footer a:hover {
 }
 
 .page-loading p {
-  font-family: "Libre Franklin", sans-serif;
   margin: 0;
+  
+  font-family: "librecheltenham", serif;
+  font-size: 2em;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+  color: var(--title-color);
 }
 
 .page-loading__spinner {
@@ -287,7 +309,4 @@ footer a:hover {
 
 .faq p {
     margin-top: 0.5em;
-
-    font-family: "Libre Franklin";
-    color: var(--subtitle-color);
 }

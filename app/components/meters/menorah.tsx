@@ -53,6 +53,7 @@ const FLAME_PATH = `
   0.17188-14.828-6.2344-26.453-6.5-26.938z
 `;
 
+
 function Flame({
   x,
   y,
@@ -64,12 +65,14 @@ function Flame({
   color: string;
   active: boolean;
 }) {
+  const flameScale = active ? 1.2 : 1;
+
   return (
     <svg
-      x={x - 40}
-      y={y - 35}
-      width="80"
-      height="80"
+      x={x - 40 * flameScale}
+      y={y - 35 * flameScale}
+      width={80 * flameScale}
+      height={80 * flameScale}
       viewBox="-5 -10 110 135"
       preserveAspectRatio="xMidYMid meet"
       overflow="visible"
@@ -105,6 +108,7 @@ function Flame({
     </svg>
   );
 }
+
 
 function CandidateLabel({
   name,
