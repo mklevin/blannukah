@@ -4,7 +4,7 @@ export default function Page() {
     return (
         <header>
             <div className="title">
-                <Link href="/">The Blue York Rhymes</Link>
+                <Link href="/" prefetch={false}>The Blue York Rhymes</Link>
             </div>
         </header>
     );

@@ -6,17 +6,22 @@ import type { UrlObject } from 'url';
 
 type NavLinkProps = {
     href: string | UrlObject,
-    text: string
+    text: string,
+    prefetch?: boolean
 }
 
-function NavLink({href, text}: NavLinkProps) {
-    const pathname = usePathname();
+function NavLink({ href, text, prefetch=true }: NavLinkProps) {
+  const pathname = usePathname();
 
-    return (<Link 
-        href={href} 
-        className={`${pathname === href.toString() ? 'active' : ''}`}>
-        {text}
-    </Link>);
+  return (
+    <Link
+      href={href}
+      prefetch={prefetch}
+      className={`${pathname === href.toString() ? "active" : ""}`}
+    >
+      {text}
+    </Link>
+  );
 }
 
 export default function Navigation() {
@@ -25,10 +30,10 @@ export default function Navigation() {
   return (
     <div className="navigation flex sticky">
         <span className="logo hidden sm:block">
-            <Link href="/">B</Link>
+            <Link href="/" prefetch={false}>B</Link>
         </span>
         <div className="nav-items flex">
-            <NavLink href="/" text="Live Results" />
+            <NavLink href="/" text="Live Results" prefetch={false} />
             <NavLink href="/faq" text="FAQ" />
             <NavLink href="/credits" text="Credits" />
             <div className="vote-link">
