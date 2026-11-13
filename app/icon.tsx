@@ -31,7 +31,7 @@ export default async function Icon() {
           height: '100%',
           color: '#fff',
           fontFamily: 'Manufacturing Consent',
-          fontSize: 30,
+          fontSize: 32,
         }}
       >
         B
