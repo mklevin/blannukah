@@ -47,7 +47,7 @@ header {
 }
 
 header .title {
-    font-family: "Manufacturing Consent";
+    font-family: "Manufacturing Consent", serif;
     font-size: 2.5em;
     text-align: center;
     letter-spacing: -0.03em;
