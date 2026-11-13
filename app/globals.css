@@ -383,7 +383,7 @@ p {
 .faq__question h2 {
     margin: 0;
     font-family: "librecheltenham", serif;
-    font-size: 2em;
+    font-size: 1.6em;
     letter-spacing: -0.005em;
     font-weight: 600;
     color: var(--title-color);
@@ -422,7 +422,7 @@ p {
 .faq__answer p {
     margin-top: 0.5em;
     font-family: "PT Serif", serif;
-    font-size: 1.10em;
+    font-size: 1em;
     letter-spacing: -0.005em;
 }
 
