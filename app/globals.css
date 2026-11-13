@@ -395,6 +395,7 @@ p {
     font-family: "librecheltenham", serif;
     font-size: 1.6em;
     letter-spacing: -0.005em;
+    line-height: 1.25em;
     font-weight: 600;
     color: var(--title-color);
 }

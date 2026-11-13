@@ -37,7 +37,7 @@ export const faqs = [
       answer: ["Don't worry about it! (Like a week. It really wasn't that bad.)"]
     }, {
       question: "Is any of the data I submit in my ballot public?",
-      answer: ["Nope! All of the publicly-exposed data is aggregated."]
+      answer: ["Nope! All of the data powering this site is aggregated. Individual ballots are only accessible by me."]
     }, {
       question: "How often does the data on here update?",
       answer: [`Pretty much every time you refresh the page! The \"database\" for all of this is literally just 
@@ -47,5 +47,9 @@ export const faqs = [
       answer: ["No clue! It could be next week, it could be next year. I'll do my best to get them to you "
         + "quickly, but much like everything about this, it's all vibes."
       ]
+    }, {
+      question: "How dare you put [state] in [region]! It clearly belongs in [other region]!",
+      answer: [`The regions on this site are actually the official national <a href="https://en.wikipedia.org/wiki/List_of_regions_of_the_United_States" target="_blank">census-designated regions</a>.
+        If you disagree with them, reach out to your local U.S. Census Bureau office to lodge a complaint.`]
     }
 ];

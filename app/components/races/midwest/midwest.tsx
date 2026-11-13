@@ -8,7 +8,7 @@ export default function MidwestRace() {
       name="Blichigas (Midwest)"
       messages={updates}
       map={<MidwestElectionMap />}
-      region="Northeast"
+      region="Midwest"
     />
   );
 }
