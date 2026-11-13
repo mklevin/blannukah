@@ -55,12 +55,11 @@ export default function Navigation() {
               fontSize="13"
               fontWeight="600"
               textAnchor="middle"
-              dominantBaseline="central"
             >
-              <text x="10" y="12">2</text>
-              <text x="30" y="12">0</text>
-              <text x="50" y="12">2</text>
-              <text x="70" y="12">6</text>
+              <text x="10" y="16">2</text>
+              <text x="30" y="16">0</text>
+              <text x="50" y="16">2</text>
+              <text x="70" y="16">6</text>
             </g>
           </svg>
         </Link>
