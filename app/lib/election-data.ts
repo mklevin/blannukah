@@ -1,4 +1,3 @@
-
 import Papa from "papaparse";
 
 import {
@@ -139,9 +138,13 @@ function validateColumns(
   }
 }
 
-async function fetchCSV(url: string): Promise<CSVRow[]> {
+async function fetchCSV(
+  url: string,
+  signal?: AbortSignal
+): Promise<CSVRow[]> {
   const response = await fetch(url, {
     cache: "no-store",
+    signal,
   });
 
   if (!response.ok) {
@@ -297,16 +300,14 @@ const REGION_BY_NICKNAME = Object.fromEntries(
 // -----------------------------------------------------------------------------
 
 /**
- * Loads candidate names from the options spreadsheet.
+ * Parses candidate names from the options spreadsheet.
  *
  * Required columns:
  * election, option_a, option_b
  */
-export async function fetchElectionOptionNames(
-  csvUrl: string = ELECTION_OPTIONS_CSV_URL
-): Promise<ElectionOptionNames> {
-  const rows = await fetchCSV(csvUrl);
-
+function parseElectionOptionNames(
+  rows: CSVRow[]
+): ElectionOptionNames {
   validateColumns(rows, [
     "election",
     "option_a",
@@ -356,6 +357,18 @@ export async function fetchElectionOptionNames(
   return options as ElectionOptionNames;
 }
 
+/**
+ * Loads candidate names from the options spreadsheet.
+ */
+export async function fetchElectionOptionNames(
+  csvUrl: string = ELECTION_OPTIONS_CSV_URL,
+  signal?: AbortSignal
+): Promise<ElectionOptionNames> {
+  const rows = await fetchCSV(csvUrl, signal);
+
+  return parseElectionOptionNames(rows);
+}
+
 // -----------------------------------------------------------------------------
 // Election results
 // -----------------------------------------------------------------------------
@@ -368,7 +381,7 @@ type GeographyTotals = {
 };
 
 /**
- * Loads and transforms the normalized results spreadsheet.
+ * Parses and transforms the normalized results spreadsheet.
  *
  * Required columns:
  * election, geography_type, geography_id, candidate, votes, latest_timestamp
@@ -376,12 +389,10 @@ type GeographyTotals = {
  * National rows use Census-region nicknames as geography IDs.
  * Regional-election rows use state names as geography IDs.
  */
-export async function fetchElectionResults(
-  csvUrl: string,
+function parseElectionResults(
+  rows: CSVRow[],
   optionNames: ElectionOptionNames
-): Promise<ElectionData> {
-  const rows = await fetchCSV(csvUrl);
-
+): ElectionData {
   validateColumns(rows, [
     "election",
     "geography_type",
@@ -554,6 +565,7 @@ export async function fetchElectionResults(
     };
 
     const raceResults = resultsByRace.get(race) ?? [];
+
     raceResults.push(result);
     resultsByRace.set(race, raceResults);
   }
@@ -600,6 +612,19 @@ export async function fetchElectionResults(
   };
 }
 
+/**
+ * Loads and transforms the normalized results spreadsheet.
+ */
+export async function fetchElectionResults(
+  csvUrl: string,
+  optionNames: ElectionOptionNames,
+  signal?: AbortSignal
+): Promise<ElectionData> {
+  const rows = await fetchCSV(csvUrl, signal);
+
+  return parseElectionResults(rows, optionNames);
+}
+
 // -----------------------------------------------------------------------------
 // Summaries
 // -----------------------------------------------------------------------------
@@ -633,9 +658,46 @@ export function summarizeElectionResults(
 
 export async function fetchElectionData(
   optionsCsvUrl: string = ELECTION_OPTIONS_CSV_URL,
-  resultsCsvUrl: string = ELECTION_RESULTS_CSV_URL
+  resultsCsvUrl: string = ELECTION_RESULTS_CSV_URL,
+  signal?: AbortSignal
 ): Promise<ElectionData> {
-  const optionNames = await fetchElectionOptionNames(optionsCsvUrl);
+  // Use an internal controller so a failure in either request also
+  // cancels the other request.
+  const controller = new AbortController();
 
-  return fetchElectionResults(resultsCsvUrl, optionNames);
+  const abortFromExternalSignal = () => {
+    controller.abort(signal?.reason);
+  };
+
+  if (signal?.aborted) {
+    abortFromExternalSignal();
+  } else {
+    signal?.addEventListener("abort", abortFromExternalSignal, {
+      once: true,
+    });
+  }
+
+  try {
+    // Both CSVs are independent network requests, so fetch them together.
+    const [optionsRows, resultsRows] = await Promise.all([
+      fetchCSV(optionsCsvUrl, controller.signal),
+      fetchCSV(resultsCsvUrl, controller.signal),
+    ]);
+
+    // The results parser needs the candidate names, so parsing happens
+    // after both requests have completed.
+    const optionNames = parseElectionOptionNames(optionsRows);
+
+    return parseElectionResults(resultsRows, optionNames);
+  } catch (error) {
+    // If either request or parser fails, stop any remaining work.
+    controller.abort(error);
+
+    throw error;
+  } finally {
+    signal?.removeEventListener(
+      "abort",
+      abortFromExternalSignal
+    );
+  }
 }

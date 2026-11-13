@@ -318,8 +318,17 @@ p {
 .page-loading p {
   margin: 0;
   
-  font-family: "librecheltenham", sans-serif;
+  font-family: "librecheltenham", serif;
   font-size: 1.5em;
+  letter-spacing: -0.005em;
+  color: var(--title-color);
+}
+
+.page-loading .subtext {
+  margin-top: -0.7em;
+  
+  font-family: "librecheltenham", erif;
+  font-size: 1.1em;
   letter-spacing: -0.005em;
   color: var(--title-color);
 }
@@ -345,6 +354,14 @@ p {
   }
 }
 
+.page-loading__retry {
+  font-family: "librecheltenham", serif;
+  font-size: 1.2em;
+  color: var(--link-color) !important;
+
+  @apply cursor-pointer border-0 bg-transparent p-0
+    text-inherit hover:underline hover:underline-offset-4;
+}
 
 .faq {
     margin: 1.5em 0;
