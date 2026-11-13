@@ -96,8 +96,8 @@ export default function Navigation() {
 
         <div className="nav-items flex">
           <NavLink href="/" text="Live Results" prefetch={false} />
-          <NavLink href="/faq/" text="FAQ" prefetch={false} />
-          <NavLink href="/credits/" text="Credits" prefetch={false} />
+          <NavLink href="/faq/" text="FAQ" />
+          <NavLink href="/credits/" text="Credits" />
           <div className="vote-link">
               <a href="https://docs.google.com/forms/d/e/1FAIpQLSdTYuZDZD1OQGTsVPNsysmJGthhOOYsFiBNwrFhquDGxOeIkg/viewform" target="_blank">
                   VOTE NOW
