@@ -40,7 +40,7 @@ export const faqs = [
       answer: ["Nope! All of the publicly-exposed data is aggregated."]
     }, {
       question: "How often does the data on here update?",
-      answer: [`Pretty much every time you fresh the page! The \"database\" for all of this is literally just 
+      answer: [`Pretty much every time you refresh the page! The \"database\" for all of this is literally just 
         a Google Sheet.`]
     }, {
       question: "How long will it take me to get my \"I Voted!\" stickers?",
