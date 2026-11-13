@@ -29,10 +29,9 @@ export default async function Icon() {
           justifyContent: 'center',
           width: '100%',
           height: '100%',
-          backgroundColor: '#000',
           color: '#fff',
           fontFamily: 'Manufacturing Consent',
-          fontSize: 24,
+          fontSize: 30,
         }}
       >
         B
