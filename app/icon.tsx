@@ -1,32 +1,53 @@
+import { ImageResponse } from 'next/og';
+
 export const dynamic = 'force-static';
 
-import { ImageResponse } from 'next/og'
-
-// Image metadata
 export const size = {
   width: 32,
   height: 32,
-}
-export const contentType = 'image/png'
+};
 
-// Image generation
-export default function Icon() {
+export const contentType = 'image/png';
+
+export default async function Icon() {
+  const fontResponse = await fetch(
+    'https://raw.githubusercontent.com/google/fonts/main/ofl/manufacturingconsent/ManufacturingConsent-Regular.ttf'
+  );
+
+  if (!fontResponse.ok) {
+    throw new Error('Failed to fetch Manufacturing Consent font');
+  }
+
+  const fontData = await fontResponse.arrayBuffer();
+
   return new ImageResponse(
     (
-      // ImageResponse JSX element
       <div
         style={{
-          fontFamily: "Manufacturing Consent",
-          fontSize: 28,
-          width: '100%',
-          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#000',
+          color: '#fff',
+          fontFamily: 'Manufacturing Consent',
+          fontSize: 24,
         }}
       >
         B
       </div>
-    ), {}
-)}
+    ),
+    {
+      ...size,
+      fonts: [
+        {
+          name: 'Manufacturing Consent',
+          data: fontData,
+          style: 'normal',
+          weight: 400,
+        },
+      ],
+    }
+  );
+}
