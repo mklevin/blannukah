@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Libre_Franklin, Manufacturing_Consent, PT_Serif } from 'next/font/google';
 import './globals.css';
 
-
+import SiteShell from "@/app/components/site-shell"
 import { ElectionDataProvider } from "@/app/components/data/election-data-provider";
 
 export const metadata: Metadata = {
@@ -41,7 +41,9 @@ export default function RootLayout({
       </head>
       <body>
         <ElectionDataProvider>
-          {children}
+          <SiteShell>
+            {children}
+          </SiteShell>
         </ElectionDataProvider>
       </body>
     </html>

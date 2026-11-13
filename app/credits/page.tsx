@@ -1,57 +1,41 @@
-import Link from "next/link";
-import Logo from "@/app/components/logo";
-import Navigation from "@/app/components/navigation";
-import { AllAuthors } from "@/app/data/authors";
+import { AllAuthors } from "@/app/components/data/authors";
 
 export default function Page() {
   return (
-    <div className="page-container">
-      <Logo />
-      <Navigation />
+    <>
+      <h1>Credits</h1>
 
-      <div className="main-content">
-        <h1>Credits</h1>
-        <div className="subtext">
-          This level of shenaniganry would have been completely impossible to pull off alone.
-          A huge shoutout to <b>Linda Liu</b> and <b>Patty Santa Cruz</b> for their incredible
-          sticker designs, to <b>The New York Times</b> for their eminently imitatable
-          web design, and to each and every one of our furry pundits and their owners!
-        </div>
-
-        <div className="credits-author-grid">
-          {AllAuthors.map((author) => (
-            <div
-              key={author.name}
-              className="credits-author"
-            >
-              <img
-                src={author.image}
-                alt={author.name}
-                className="credits-author-image"
-              />
-
-              <div className="credits-author-info">
-                <p className="credits-author-name">
-                  {author.name}
-                </p>
-
-                <p className="credits-author-title">
-                  {author.jobTitle}
-                </p>
-
-                {author.credit && (
-                  <p className="credits-author-credit">
-                    {author.credit}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="subtext">
+        This level of shenaniganry would have been completely impossible
+        to pull off alone. A huge shoutout to <b>Linda Liu</b> and
+        <b> Patty Santa Cruz</b> for their incredible sticker designs,
+        to <b>The New York Times</b> for their eminently imitatable
+        web design, and to each and every one of our furry pundits
+        and their owners!
       </div>
-      <footer>
-          <span><Link href="https://mattlevin.io">© 2026 The Blue York Rhymes Company</Link></span>
-      </footer>
-    </div>
+
+      <div className="credits-author-grid">
+        {AllAuthors.map((author) => (
+          <div key={author.name} className="credits-author">
+            <img
+              src={author.image}
+              alt={author.name}
+              className="credits-author-image"
+            />
+
+            <div className="credits-author-info">
+              <p className="credits-author-name">{author.name}</p>
+              <p className="credits-author-title">{author.jobTitle}</p>
+
+              {author.credit && (
+                <p className="credits-author-credit">
+                  {author.credit}
+                </p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
