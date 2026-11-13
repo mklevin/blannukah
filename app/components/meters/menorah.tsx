@@ -214,7 +214,6 @@ export default function VoteShareMenorah() {
         <svg
           viewBox="0 -65 900 210"
           width="100%"
-          height="auto"
           className="block h-auto w-full"
           style={{ aspectRatio: "900 / 210" }}
           role="img"
