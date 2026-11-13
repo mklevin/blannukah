@@ -33,6 +33,11 @@
     --map-tooltip-shadow: 0 3px 12px rgb(0 0 0 / 12%);
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 main {
     font-family: "Georgia";
 }
@@ -290,7 +295,8 @@ p {
 }
 
 .page-loading {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -303,10 +309,9 @@ p {
 .page-loading p {
   margin: 0;
   
-  font-family: "librecheltenham", serif;
-  font-size: 2em;
+  font-family: "librecheltenham", sans-serif;
+  font-size: 1.5em;
   letter-spacing: -0.005em;
-  font-weight: 600;
   color: var(--title-color);
 }
 
