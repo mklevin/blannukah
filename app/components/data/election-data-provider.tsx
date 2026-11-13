@@ -35,21 +35,6 @@ export function ElectionDataProvider({
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  
-  const instanceId = useRef(Math.random().toString(36).slice(2, 8));
-
-  useEffect(() => {
-    console.log(`[Provider ${instanceId.current}] mounted`);
-
-    return () => {
-      console.log(`[Provider ${instanceId.current}] unmounted`);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log(`[Provider ${instanceId.current}] loading:`, loading);
-  }, [loading]);
-
   useEffect(() => {
     const controller = new AbortController();
     let cancelled = false;
