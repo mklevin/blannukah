@@ -34,6 +34,13 @@ export const KitKat: Author = {
   credit: "Andrew Truong"
 }
 
+export const Pasta: Author = {
+  name: "Pasta",
+  jobTitle: "Perpetually Baffled Glutton",
+  image: publicPath("/images/authors/pasta.jpeg"),
+  credit: "Snow"
+}
+
 export const Zoidberg: Author = {
   name: "Zoidberg Cooper",
   jobTitle: "MLB Umpire",
@@ -41,4 +48,4 @@ export const Zoidberg: Author = {
   credit: "Emily Cooper"
 }
 
-export const AllAuthors = [Brie, Circe, Colby, KitKat, Zoidberg];
+export const AllAuthors = [Brie, Circe, Colby, KitKat, Pasta, Zoidberg];

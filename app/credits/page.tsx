@@ -10,7 +10,7 @@ export default function Page() {
         to pull off alone. A huge shoutout to <b>Linda Liu</b> and
         <b> Patty Santa Cruz</b> for their incredible sticker designs,
         to <b>The New York Times</b> for their eminently imitatable
-        web design, and to each and every one of our furry pundits
+        election website, and to each and every one of our furry pundits
         and their owners!
       </div>
 

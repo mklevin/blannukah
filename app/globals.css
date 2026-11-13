@@ -126,7 +126,7 @@ p {
 }
 
 .navigation {
-    padding: 0.1em 1.2em;
+    padding: 0.1em 1.2em 0.1em 6%;
     border-bottom: 1px solid var(--divider-color);
     align-items: center;
     height: 3.5em;
@@ -137,8 +137,16 @@ p {
 .navigation .logo {
     font-family: "Manufacturing Consent";
     font-size: 2.3em;
-    margin-right: 1em;
     padding-bottom: 0.1em;
+}
+
+.navigation .divider {
+    @variant sm {
+        margin: 0 1.25em;
+        width: 1px;
+        height: 1.3em;
+        background-color: var(--divider-color);
+    }
 }
 
 .navigation .nav-items {
@@ -336,16 +344,96 @@ p {
   }
 }
 
+
 .faq {
-    margin: 2em 0;
+    margin: 1.5em 0;
 }
 
-.faq p {
-    margin-top: 0.5em;
+.faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    gap: 1em;
+}
 
-    font-family: "PT Serif", serif;
-    font-size: 1.18em;
+.faq__question h2 {
+    margin: 0;
+    font-family: "librecheltenham", serif;
+    font-size: 2em;
     letter-spacing: -0.005em;
+    font-weight: 600;
+    color: var(--title-color);
+}
+
+.faq__chevron {
+    flex-shrink: 0;
+    color: var(--subtext-color);
+    transition: transform 0.2s ease;
+}
+
+.faq__chevron--open {
+    transform: rotate(180deg);
+}
+
+
+.faq__answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+        grid-template-rows 0.3s ease,
+        opacity 0.25s ease;
+}
+
+.faq__answer--open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.faq__answer-inner {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.faq__answer p {
+    margin-top: 0.5em;
+    font-family: "PT Serif", serif;
+    font-size: 1.10em;
+    letter-spacing: -0.005em;
+}
+
+.faq__answer p a {
+    text-decoration: underline;
+    color: var(--link-color);
+}
+
+.faq__answer p a:hover {
+    text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .faq__answer,
+    .faq__chevron {
+        transition: none;
+    }
+}
+
+.faq__question:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .faq__chevron {
+        transition: none;
+    }
 }
 
 .faq p a {
