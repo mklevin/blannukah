@@ -30,13 +30,25 @@ export function ElectionDataProvider({
 }: {
   children: ReactNode;
 }) {
-  const instanceId = useRef(Math.random().toString(36).slice(2, 8));
-  console.log("Provider render:", instanceId.current);
-
   const [data, setData] = useState<ElectionResults | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+
+  
+  const instanceId = useRef(Math.random().toString(36).slice(2, 8));
+
+  useEffect(() => {
+    console.log(`[Provider ${instanceId.current}] mounted`);
+
+    return () => {
+      console.log(`[Provider ${instanceId.current}] unmounted`);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(`[Provider ${instanceId.current}] loading:`, loading);
+  }, [loading]);
 
   useEffect(() => {
     const controller = new AbortController();
