@@ -29,6 +29,14 @@ export function ElectionDataProvider({
 }: {
   children: ReactNode;
 }) {
+useEffect(() => {
+    console.log("ElectionDataProvider mounted");
+
+    return () => {
+      console.log("ElectionDataProvider unmounted");
+    };
+  }, []);
+
   const [data, setData] = useState<ElectionResults | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
