@@ -1,5 +1,5 @@
-import Race from "@/app/components/race";
-import NortheastElectionMap from "@/app/maps/northeast";
+import Race from "../race";
+import NortheastElectionMap from "./map";
 import { updates } from "./updates";
 
 export default function NortheastRace() {

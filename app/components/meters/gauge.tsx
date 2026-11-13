@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useElectionData } from "@/app/components/election-data-provider";
+import { useElectionData } from "@/app/components/data/election-data-provider";
 import type { CensusRegion } from "@/app/lib/constants/geography";
 
 type VoteShareGaugeProps = {

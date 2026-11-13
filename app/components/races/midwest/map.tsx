@@ -1,9 +1,9 @@
 "use client";
 
-import StateMap from "@/app/components/state-map";
-import { useElectionData } from "@/app/components/election-data-provider";
+import StateMap from "@/app/components/map/state-map";
+import { useElectionData } from "@/app/components/data/election-data-provider";
 
-export default function NortheastElectionMap() {
+export default function MidwestElectionMap() {
   const { data, loading, error } = useElectionData();
 
   if (error) return <p role="alert">{error}</p>;
@@ -12,16 +12,16 @@ export default function NortheastElectionMap() {
     return <p role="status">Loading map…</p>;
   }
 
-  const northeast = data.states.filter(
+  const midwest = data.states.filter(
     (result) =>
       result.geography.type === "state" &&
-      result.geography.region === "Northeast"
+      result.geography.region === "Midwest"
   );
 
   return (
     <StateMap
-      region="Northeast"
-      results={northeast}
+      region="Midwest"
+      results={midwest}
       maxSize="20em"
       minSize="20em"
     />

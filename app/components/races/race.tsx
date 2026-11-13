@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import VoteShareGauge from "@/app/components/meters/gauge";
 import type { CensusRegion } from "@/app/lib/constants/geography";
-import LatestUpdates from "@/app/components/latest-updates";
+import LatestUpdates from "@/app/components/races/latest-updates";
 
 type Author = {
   image: string;

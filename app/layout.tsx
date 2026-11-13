@@ -3,7 +3,7 @@ import { Libre_Franklin, Manufacturing_Consent, PT_Serif } from 'next/font/googl
 import './globals.css';
 
 
-import { ElectionDataProvider } from "@/app/components/election-data-provider";
+import { ElectionDataProvider } from "@/app/components/data/election-data-provider";
 
 export const metadata: Metadata = {
   title: 'Matt\'s Hanukkah List 2026 Election',

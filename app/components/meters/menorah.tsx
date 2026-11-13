@@ -1,6 +1,6 @@
 
 "use client";
-import { useElectionData } from "@/app/components/election-data-provider";
+import { useElectionData } from "@/app/components/data/election-data-provider";
 
 type VoteShareMenorahProps = {
   optionAShare: number;

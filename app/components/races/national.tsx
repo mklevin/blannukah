@@ -1,8 +1,7 @@
-
 "use client";
 
-import StateMap from "@/app/components/state-map";
-import { useElectionData } from "@/app/components/election-data-provider";
+import StateMap from "@/app/components/map/state-map";
+import { useElectionData } from "@/app/components/data/election-data-provider";
 
 export default function NationalElectionMap() {
   const { data, loading, error } = useElectionData();

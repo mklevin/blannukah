@@ -1,5 +1,5 @@
-import Race from "@/app/components/race";
-import MidwestElectionMap from "@/app/maps/midwest";
+import Race from "../race";
+import MidwestElectionMap from "./map";
 import { updates } from "./updates";
 
 export default function MidwestRace() {

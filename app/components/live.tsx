@@ -1,6 +1,6 @@
 "use client";
 
-import { useElectionData } from "@/app/components/election-data-provider";
+import { useElectionData } from "@/app/components/data/election-data-provider";
 import { fromZonedTime, formatInTimeZone } from "date-fns-tz";
 
 type LiveProps = {

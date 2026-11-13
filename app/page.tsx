@@ -4,9 +4,9 @@ import Logo from "@/app/components/logo";
 import Navigation from "@/app/components/navigation";
 
 import VoteShareMenorah from "@/app/components/meters/menorah";
-import NationalElectionMap from "@/app/maps/national";
-import NortheastRace from "@/app/races/northeast/northeast";
-import MidwestRace from "@/app/races/midwest/midwest";
+import NationalElectionMap from "@/app/components/races/national";
+import NortheastRace from "@/app/components/races/northeast/northeast";
+import MidwestRace from "@/app/components/races/midwest/midwest";
 
 
 export default function Home() {
